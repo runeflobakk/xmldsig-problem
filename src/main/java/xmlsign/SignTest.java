@@ -23,6 +23,7 @@ import java.security.cert.CertificateFactory;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.List;
 
+import static xmlsign.Utils.newEmptyXmlDocument;
 import static xmlsign.Utils.parseXml;
 import static xmlsign.Utils.pretty;
 import static xmlsign.Utils.sha256;
@@ -63,10 +64,10 @@ public class SignTest {
 
         System.out.print("*** Document before signing:\n" + pretty(documentToSign));
 
-        // ka-boom on JDK 11!
-        xmlSignature.sign(new DOMSignContext(signKey, documentToSign));
+        Document signedDocument = newEmptyXmlDocument();
+        xmlSignature.sign(new DOMSignContext(signKey, signedDocument));
 
-        System.out.println("\n*** Document after signing:\n" + pretty(documentToSign));
+        System.out.println("\n*** Document after signing:\n" + pretty(signedDocument));
     }
 
 

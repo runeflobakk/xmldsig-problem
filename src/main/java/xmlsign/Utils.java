@@ -2,10 +2,9 @@ package xmlsign;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -15,20 +14,42 @@ import javax.xml.transform.stream.StreamResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-final class Utils {
+public final class Utils {
+
+    /**
+     * The factory's methods to create documentbuilders are thread safe.
+     */
+    private static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
+    static {
+        DOCUMENT_BUILDER_FACTORY.setNamespaceAware(true);
+    }
+
+    static Document newEmptyXmlDocument() {
+        return newDocument(DocumentBuilder::newDocument);
+    }
 
     static Document parseXml(String xml) {
+        return newDocument(builder -> builder.parse(new ByteArrayInputStream(xml.getBytes(UTF_8))));
+    }
+
+    static Document newDocument(DocumentCreator documentCreator) {
         try {
-            return DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes(UTF_8)));
-        } catch (SAXException | IOException | ParserConfigurationException e) {
+            return documentCreator.createDocument(DOCUMENT_BUILDER_FACTORY.newDocumentBuilder());
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+    }
+
+    @FunctionalInterface
+    interface DocumentCreator {
+        Document createDocument(DocumentBuilder builder) throws Exception;
     }
 
     static byte[] sha256(String s) {
@@ -43,8 +64,6 @@ final class Utils {
         }
     }
 
-    private Utils() {}
-
     static String pretty(Node xml) throws TransformerException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Transformer tr = TransformerFactory.newDefaultInstance().newTransformer();
@@ -53,4 +72,6 @@ final class Utils {
         tr.transform(new DOMSource(xml), new StreamResult(out));
         return out.toString(UTF_8);
     }
+
+    private Utils() {}
 }
