@@ -18,3 +18,8 @@ The code in this repository demonstrates a solution to this in the [6012c7241](h
 ## Background
 
 The implementation of XML signature and encryption in the JDK is based on [Apache Santuario](http://santuario.apache.org/), and was [updated from version 1.5.4 to 2.1.1 in Java 11](https://www.oracle.com/technetwork/java/javase/11-relnote-issues-5012449.html#JDK-8177334) ([JDK-8177334](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8177334)).
+
+
+## License
+
+This code is licensed under [WTFPL](http://www.wtfpl.net). My intentions are to provide the code for anyone to use it for whatever they like, as long as it is not for anything evil. If the code helps you solve a problem in any way, I would appreciate some kind of attribution, e.g. a reference back to this repository in a relevant commit in your own project, a [mention on Twitter](https://twitter.com/intent/tweet?text=Wow%21+This+great+GitHub+repo+by+%40rflob+just+helped+my+solve+my+XMLDSig+problem%21+https%3A%2F%2Fgithub.com%2Fruneflobakk%2Fxmldsig-problem), or anything else as a nice gesture. However, this is in no way mandatory.

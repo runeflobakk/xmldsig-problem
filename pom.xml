@@ -23,4 +23,11 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <licenses>
+        <license>
+            <name>Do What The Fuck You Want To Public License (WTFPL)</name>
+            <url>http://www.wtfpl.net/about/</url>
+        </license>
+    </licenses>
 </project>
